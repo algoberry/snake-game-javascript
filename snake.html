@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+	<head> 
+		<meta charset = "utf-8"/> 
+		<title>Snake Games</title>
+		<style>
+		#board {
+		width: 400px;
+		height: 400px;
+		position: relative;
+		background: black;
+		}
+
+		.snake {
+		width: 20px;
+		height: 20px;
+		position: absolute;
+		background-color: green;
+		text-align: center;
+		}
+
+		#apple {
+		width: 20px;
+		height: 20px;
+		position: absolute;
+		background-color: red;
+		top:120px;
+		left:80px;
+		}
+		</style>
+	</head>
+	<body>	
+		<div id="board">
+			<div id="apple"></div>
+			<div class="snake"></div>
+		</div>
+		<div>
+		<p>Created by <a href = "https://www.algoberry.com" target="_blank">Algoberry</a></p> 
+		</div>
+	</body>
+</html>
+<script>
+
+//Object Declaration
+var boardobj;
+var appleobj;
+var snakeobj;
+
+//Variable Declaration
+var portionSize = 20;	//Same portion size should be set to snake (width, height) & apple (width, height) 
+
+var boardTop = 400;		//Board top position
+var boardLeft = 400;	//Board left position
+
+var appleTop = 120;		//Default apple top position
+var appleLeft = 80;		//Default apple left position
+
+var getSnakeTop = 0;
+var getSnakeLeft = 0;
+
+var counter = 0;
+var snakeLength = 0;
+
+function starter() {
+	boardobj = document.getElementById("board");
+	appleobj = document.getElementById("apple");
+	snakeobj = document.getElementById("board").getElementsByClassName("snake");
+	snakeobj[0].style.top = "0px";
+	snakeobj[0].innerHTML = snakeLength;
+	snakeobj[0].style.left = "0px";
+}
+
+function run() {
+	//Get current snake position
+	getSnakeTop = snakeobj[0].style.top;
+	getSnakeTop = getSnakeTop.replace("px","");
+	getSnakeTop = parseInt(getSnakeTop);
+	
+	getSnakeLeft = snakeobj[0].style.left;
+	getSnakeLeft = getSnakeLeft.replace("px","");
+	getSnakeLeft = parseInt(getSnakeLeft);
+	
+	if(getSnakeTop == appleTop || getSnakeLeft < appleLeft || getSnakeLeft > appleLeft) { //snake and apple are present in same column
+		//---
+		if(getSnakeLeft < appleLeft) {
+			getSnakeLeft = getSnakeLeft + portionSize;
+		}
+		else
+		{
+			getSnakeLeft = getSnakeLeft - portionSize;
+		}
+		if(getSnakeLeft < 0) {	
+			getSnakeLeft = boardLeft-portionSize; 
+		}
+		else if(getSnakeLeft == boardLeft) {
+			getSnakeLeft = 0;
+		}
+	
+		if(getSnakeTop == appleTop && getSnakeLeft == appleLeft) {
+			eat();
+		}
+		else
+		{
+			follow();
+			snakeobj[0].style.left = getSnakeLeft+"px";
+		}
+		//---
+	}
+	else if(getSnakeLeft == appleLeft || getSnakeTop < appleTop || getSnakeTop > appleTop) { //snake and apple are present in same row
+		//---
+		if(getSnakeTop < appleTop) {
+			getSnakeTop = getSnakeTop + portionSize;
+		}
+		else
+		{
+			getSnakeTop = getSnakeTop - portionSize;
+		}
+		if(getSnakeTop < 0) {	
+			getSnakeTop = boardTop-portionSize; 
+		}
+		else if(getSnakeTop == boardTop) {	
+			getSnakeTop = 0; 
+		}
+		
+		if(getSnakeTop == appleTop && getSnakeLeft == appleLeft) {
+			eat();
+		}
+		else
+		{
+			follow();
+			snakeobj[0].style.top = getSnakeTop+"px";
+		}
+		//---
+	}
+}
+
+function follow() {
+	if(snakeLength >= 1) {
+		counter = snakeLength;
+		while(counter > 0) {
+			if(snakeobj[counter-1].style.left == getSnakeLeft+"px" && snakeobj[counter-1].style.top == getSnakeTop+"px") {
+				snakeobj[0].style.backgroundColor = "blue";
+				snakeobj[counter-1].style.backgroundColor = "blue";
+				clearInterval(runObj);
+				alert("Snake Clashed");
+				break;
+			}
+			else
+			{
+				snakeobj[counter].style.left = snakeobj[counter-1].style.left;
+				snakeobj[counter].style.top = snakeobj[counter-1].style.top;
+				counter = counter - 1;
+			}
+		}
+	}
+}
+
+function eat() {
+	//Increase snake body after ate apple.
+	snakeLength = snakeLength + 1;
+	newobj = document.createElement("div");
+	newobj.innerHTML = snakeLength;
+	newobj.classList.add("snake");
+	boardobj.appendChild(newobj);
+	
+	newobj.style.top = snakeobj[snakeLength-1].style.top;
+	newobj.style.left = snakeobj[snakeLength-1].style.left;
+	
+	follow();
+	
+	snakeobj[0].style.top = appleTop+"px";
+	snakeobj[0].style.left = appleLeft+"px";
+	
+	//Set new place for apple
+	appleTop = Math.floor((Math.random() * 350) + 1);
+	appleTop = appleTop%portionSize;
+	if(appleTop >= 1) {
+	appleTop = portionSize*appleTop;
+	}
+	appleLeft = Math.floor((Math.random() * 350) + 1);
+	appleLeft = appleLeft%portionSize;
+	if(appleLeft >= 1) {
+	appleLeft = portionSize*appleLeft;
+	}
+	appleobj.style.top = appleTop+"px";
+	appleobj.style.left = appleLeft+"px";
+}
+
+//Start Point
+starter();
+var runObj = setInterval(run,100);
+</script>
