@@ -172,12 +172,12 @@ function eat() {
 	snakeobj[0].style.left = appleLeft+"px";
 	
 	//Set new place for apple
-	appleTop = Math.floor((Math.random() * 350) + 1);
+	appleTop = Math.floor((Math.random() * (boardTop - portionSize)) + 1);
 	appleTop = appleTop%portionSize;
 	if(appleTop >= 1) {
 	appleTop = portionSize*appleTop;
 	}
-	appleLeft = Math.floor((Math.random() * 350) + 1);
+	appleLeft = Math.floor((Math.random() * (boardLeft - portionSize)) + 1);
 	appleLeft = appleLeft%portionSize;
 	if(appleLeft >= 1) {
 	appleLeft = portionSize*appleLeft;
