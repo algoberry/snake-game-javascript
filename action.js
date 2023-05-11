@@ -61,6 +61,7 @@ function start() {
 	snakeobj[0].style.top = "0px";
 	snakeobj[0].innerHTML = snakeLength;
 	snakeobj[0].style.left = "0px";
+	//Set Snake head color
 	snakeobj[0].style.backgroundColor = "#539165";
 	snakeobj[0].style.border = "initial";
 	applelocation();
